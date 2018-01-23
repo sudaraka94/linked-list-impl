@@ -78,24 +78,47 @@ node * seed(node *head,int n){
 	return head;
 }
 
-node * process(node *head){
-	int choice=rand() % 4;
-	if(choice==1){
-		int val=rand() % 65536;
-		return insert(head,val);
+// node * process(node *head,float member,float insert,float delete){
+// 	int choice=rand() % 4;
+// 	if(choice==1){
+// 		int val=rand() % 65536;
+// 		return insert(head,val);
+// 	}
+// 	else if (choice==2)
+// 	{
+// 		int val=rand() % 65536;
+// 		return delete(head,val);
+// 	}
+// 	else{
+// 		int val=rand() % 65536;
+// 		member(head,val);
+// 		return head;
+// 	}
+// }
+
+int searial_process(node *head,int n_member,int n_insert,int n_delete){
+
+	int i;
+	for( i = 0 ; i < n_member ; i++ ) {
+	    int val=rand() % 65536;
+		member(head,val);	
 	}
-	else if (choice==2)
-	{
+
+	for( i = 0 ; i < n_insert ; i++ ) {
+	    int val=rand() % 65536;
+		head=insert(head,val);	
+	}
+
+	for( i = 0 ; i < n_delete ; i++ ) {
 		int val=rand() % 65536;
 		return delete(head,val);
 	}
-	else{
-		int val=rand() % 65536;
-		member(head,val);
-		return head;
-	}
+	return 0;
 }
 
+int mutex_process(node *head,int member,int insert,int delete){
+	return 0;
+}
 
 int main(int argc, char const *argv[])
 {
@@ -106,13 +129,8 @@ int main(int argc, char const *argv[])
 	node *head=NULL;
 	head=seed(head,10);
 	
-	int i,n;
-	n=5;
-
-	for( i = 0 ; i < n ; i++ ) {
-	    process(head);	
-	}
-	
+	searial_process(head,5,1,1);
+	printf("%s\n","Finished" );
 	return 0;
 
 }

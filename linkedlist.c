@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <pthread.h>
 //This is the definition of a node
 typedef struct node
 {
@@ -111,12 +112,34 @@ int searial_process(node *head,int n_member,int n_insert,int n_delete){
 
 	for( i = 0 ; i < n_delete ; i++ ) {
 		int val=rand() % 65536;
-		return delete(head,val);
+		head=delete(head,val);
 	}
 	return 0;
 }
 
-int mutex_process(node *head,int member,int insert,int delete){
+void *test(void* rank){
+	printf("%s\n", "Hello from a thread");
+}
+
+int mutex_process(){
+	long thread;
+	pthread_t* thread_handles;
+
+	int num_thread=5;
+	int thread_count=num_thread;
+	thread_handles=malloc(thread_count*sizeof(pthread_t));
+
+	for (thread=0;thread<thread_count;thread++){
+		pthread_create(&thread_handles[thread],NULL,test,(void*)thread);
+	}
+
+	printf("%s\n", "Hello from the main thread\n");
+
+	for (thread=0;thread<thread_count;thread++){
+		pthread_join(thread_handles[thread],NULL);
+	}
+
+	free(thread_handles);
 	return 0;
 }
 
@@ -129,8 +152,8 @@ int main(int argc, char const *argv[])
 	node *head=NULL;
 	head=seed(head,10);
 	
-	searial_process(head,5,1,1);
-	printf("%s\n","Finished" );
+	// searial_process(head,5,1,1);
+	mutex_process();
 	return 0;
 
 }
